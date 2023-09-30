@@ -1,7 +1,7 @@
 import os
 
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+#os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 import glob
 from tensorflow import keras
@@ -15,8 +15,18 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # load models
 word2vec_model = gensim.models.Word2Vec.load(BASE_DIR+'/model_files/word2vec_model.model')
-base_network = keras.models.load_model(BASE_DIR+"/model_files/base_network.h5", compile=False)
-clf_network = keras.models.load_model(BASE_DIR+"/model_files/clf_network.h5", compile=False)
+
+base_network_json = open(BASE_DIR+'/model_files/base_network.json', 'r')
+loaded_base_network_json = base_network_json.read()
+base_network_json.close()
+base_network = keras.models.model_from_json(loaded_base_network_json)
+base_network.load_weights(BASE_DIR+'/model_files/base_network.h5')
+
+clf_network_json = open(BASE_DIR+'/model_files/clf_network.json', 'r')
+loaded_clf_network_json = clf_network_json.read()
+clf_network_json.close()
+clf_network = keras.models.model_from_json(loaded_clf_network_json)
+clf_network.load_weights(BASE_DIR+'/model_files/clf_network.h5')
 
 def compare_final_texts(known_text: list[str], unknown_text: list[str]) -> float:
     '''Compares a list of known texts to an unknown text and returns a score'''
