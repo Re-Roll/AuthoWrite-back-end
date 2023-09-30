@@ -15,8 +15,8 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # load models
 word2vec_model = gensim.models.Word2Vec.load(BASE_DIR+'/model_files/word2vec_model.model')
-base_network = keras.models.load_model(BASE_DIR+"/model_files/base_network.tf", compile=False)
-clf_network = keras.models.load_model(BASE_DIR+"/model_files/clf_network.tf", compile=False)
+base_network = keras.models.load_model(BASE_DIR+"/model_files/base_network.h5", compile=False)
+clf_network = keras.models.load_model(BASE_DIR+"/model_files/clf_network.h5", compile=False)
 
 def compare_final_texts(known_text: list[str], unknown_text: list[str]) -> float:
     '''Compares a list of known texts to an unknown text and returns a score'''
