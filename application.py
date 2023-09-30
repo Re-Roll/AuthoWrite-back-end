@@ -22,12 +22,8 @@ score_model = api.model('Score', {
     'w_sim': fields.List(fields.Float(required=True, description='Word similarity between known and unknown texts')),
     'punct_p': fields.List(fields.Float(required=True), description='Proportion of punctuation used'),
     'avg_sent_l': fields.List(fields.Float(required=True), description='Average sentence length'),
-    'sent_over_avg': fields.List(fields.Float(required=True), description='Proportion of sentences over average length'),
-    'sent_under_avg': fields.List(fields.Float(required=True), description='Proportion of sentences under average length'),
     'rare_word_p': fields.List(fields.Float(required=True), description='Proportion of rare words used'),
     'long_word_p': fields.List(fields.Float(required=True), description='Proportion of long words used'),
-    'words_over_avg': fields.List(fields.Float(required=True), description='Proportion of words over average word length'),
-    'words_under_avg': fields.List(fields.Float(required=True), description='Proportion of words under average word length'),
     'ttr': fields.List(fields.Float(required=True), description='Proportion of unique words used compared to total words used'),
     'word_count': fields.List(fields.Float(required=True), description='Total number of words used'),
     'score': fields.Integer(required=True, description='Overall authorship score out of 100')

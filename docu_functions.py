@@ -62,14 +62,10 @@ def simplify_response(response: dict) -> dict:
     
     # get sentence values
     simplified_response['avg_sent_l'] = response['avg_sentence_length'] + [proportion(response['avg_sentence_length'][0], response['avg_sentence_length'][1])]
-    simplified_response['sent_over_avg'] = list_pct(response['sentences_over_avg']) + [proportion(response['sentences_over_avg'][0], response['sentences_over_avg'][1])]
-    simplified_response['sent_under_avg'] = list_pct(response['sentences_under_avg']) + [proportion(response['sentences_under_avg'][0], response['sentences_under_avg'][1])]
     
     # get word values
     simplified_response['rare_word_p'] = list_pct(response['rare_word_count']) + [proportion(response['rare_word_count'][0], response['rare_word_count'][1])]
     simplified_response['long_word_p'] = list_pct(response['long_word_count']) + [proportion(response['long_word_count'][0], response['long_word_count'][1])]
-    simplified_response['words_over_avg'] = list_pct(response['words_over_avg_length']) + [proportion(response['words_over_avg_length'][0], response['words_over_avg_length'][1])]
-    simplified_response['words_under_avg'] = list_pct(response['words_under_avg_length']) + [proportion(response['words_under_avg_length'][0], response['words_under_avg_length'][1])]
     simplified_response['ttr'] = list_pct(response['ttr']) + [proportion(response['ttr'][0], response['ttr'][1])]
     simplified_response['word_count'] = response['word_count'] + [proportion(response['word_count'][0], response['word_count'][1])]
     

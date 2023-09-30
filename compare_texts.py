@@ -1,9 +1,13 @@
+import os
+
+#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+#os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 import glob
 from tensorflow import keras
 import numpy as np
 import gensim
 from functions import get_vectors
-import os
 from docu_functions import process_file
 
 # initial folder path
