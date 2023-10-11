@@ -61,7 +61,7 @@ class Compare(Resource):
         return response, 200
     
 @api.route('/test')
-class Test(Resource):
+class TestAgain(Resource):
     def get(self):
         '''Test the API'''
         return 'Hello World', 200
