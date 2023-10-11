@@ -65,6 +65,12 @@ class TestAgain(Resource):
     def get(self):
         '''Test the API'''
         return 'Hello World', 200
+    
+@api.route('/test')
+class TestAgain(Resource):
+    def get(self):
+        '''Test the API'''
+        return 'Hello World', 200
 
 
 if __name__ == '__main__':
