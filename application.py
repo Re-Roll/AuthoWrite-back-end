@@ -59,19 +59,6 @@ class Compare(Resource):
             abort(500, 'Error calculating score')
         
         return response, 200
-    
-@api.route('/test_again')
-class TestAgain(Resource):
-    def get(self):
-        '''Test the API'''
-        return 'Hello World', 200
-    
-@api.route('/test')
-class TestAgain(Resource):
-    def get(self):
-        '''Test the API'''
-        return 'Hello World', 200
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
