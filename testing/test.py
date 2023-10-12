@@ -13,46 +13,48 @@ class FormData(object):
 # create a function which connects to AI with the url http://3.26.213.177:5000/ and returns True if output matches expected output
 def test_compare(url: str, form_data: FormData):
     # make data a multipart/form-data from FormData
-    files = {}
     data = {}
     
     if form_data.known_texts:
         data['known_texts'] = form_data.known_texts
     if form_data.unknown_text:
         data['unknown_text'] = form_data.unknown_text
-    if form_data.known_files:
-        for i, file in enumerate(form_data.known_files):
-            files['known_file'+str(i)] = file
+        
+    files = form_data.known_files
     if form_data.unknown_file:
-        files['unknown_file'] = form_data.unknown_file
+         files += [form_data.unknown_file]
         
     response = requests.post(url, data=data, files=files)
     
-    #return response.status_code == form_data.expected_output
-    return response.json()
+    return response.status_code == form_data.expected_output
 
 
 if __name__ == '__main__':
     # ASSUMPTION FILE IS .txt UNLESS SPECIFIED
-    url = 'http://3.26.213.177:5000/compare'
+    url = 'https://wxqjx4px-5000.auc1.devtunnels.ms/compare'
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+    
+    tests = []
     
     ### ========== ALL TEST CASES ========== ###
     
     # ============ Text Test Cases =========== #
     # known text + unknown text
-    test_data1 = FormData(known_texts=['This is a test.'], unknown_text='This is a test.')
+    tests.append(FormData(known_texts=['This is a test.'], unknown_text='This is a test.'))
     
     # known text only
-    test_data2 = FormData(known_texts=['This is a test.'], expected_output=401)
+    tests.append(FormData(known_texts=['This is a test.'], expected_output=401))
     
     # unknown text only
-    test_data3 = FormData(unknown_text='This is a test.', expected_output=400)
+    tests.append(FormData(unknown_text='This is a test.', expected_output=400))
     # ======================================== #
     
     # ============ File Test Cases =========== #
     # known file + unknown file
-    test_data4 = FormData(known_files=[open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb'))
+    tests.append(FormData(
+        known_files = [('known_files', ('txt_test01.txt', open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')))], 
+        unknown_file = ('unknown_file', ('txt_test02.txt', open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')))
+    ))
     
     # known file only
     
@@ -148,4 +150,7 @@ if __name__ == '__main__':
     # ======================================== #
     ### ==================================== ###
     
-    print(test_compare(url, test_data4))
+    for test in tests:
+        if not test_compare(url, test):
+            print('Test Failed')
+            break
