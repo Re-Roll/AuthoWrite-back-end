@@ -31,7 +31,7 @@ def test_compare(url: str, form_data: FormData):
 
 if __name__ == '__main__':
     # ASSUMPTION FILE IS .txt UNLESS SPECIFIED
-    url = 'https://wxqjx4px-5000.auc1.devtunnels.ms/compare'
+    url = 'http://3.26.213.177:5000/compare'
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
     
     tests = []
