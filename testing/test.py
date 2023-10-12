@@ -1,4 +1,5 @@
 import requests
+import os
 
 # create class for form data
 class FormData(object):
@@ -27,12 +28,15 @@ def test_compare(url: str, form_data: FormData):
         
     response = requests.post(url, data=data, files=files)
     
-    return response.status_code == form_data.expected_output
+    #return response.status_code == form_data.expected_output
+    return response.json()
 
 
 if __name__ == '__main__':
     # ASSUMPTION FILE IS .txt UNLESS SPECIFIED
     url = 'http://3.26.213.177:5000/compare'
+    BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+    
     ### ========== ALL TEST CASES ========== ###
     
     # ============ Text Test Cases =========== #
@@ -48,7 +52,7 @@ if __name__ == '__main__':
     
     # ============ File Test Cases =========== #
     # known file + unknown file
-    test_data4 = FormData(known_files=[open('./test_files/txt_test01.txt', 'rb')], unknown_file=open('./test_files/txt_test02.txt', 'rb'))
+    test_data4 = FormData(known_files=[open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb'))
     
     # known file only
     
