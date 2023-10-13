@@ -65,11 +65,16 @@ def compare_mix_texts(known_files, known_texts: list[str], unknown_file = None, 
     # check if known texts were provided
     if len(known_texts) == 0:
         return 2, None
-    
+
     # check if unknown text was provided
     if unknown_file:
-        unknown_text = process_file(unknown_file)
-    elif not unknown_text:
+        unknown_text2 = process_file(unknown_file)
+        
+        # check if unknown file is not empty
+        if unknown_text2:
+            unknown_text = unknown_text2
+
+    if not unknown_text:
         return 3, None
     
     # make sure unknown text is not empty or just whitespaces

@@ -4,77 +4,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-# ========== Corrupt Test Cases ========== #
-    # corrupt pdf + unknown text
-    
-    # corrupt docx + unknown text
-    
-    # corrupt txt + unknown text
-    
-    # corrupt pdf + known files + known text + unknown text
-    
-    # corrupt docx + known files + known text + unknown text
-    
-    # corrupt txt + known files + known text + unknown text
-    
-    # known text + corrupt unknown pdf
-    
-    # known text + corrupt unknown docx
-    
-    # known text + corrupt unknown txt
-    
-    # ======================================== #
-    
-    # =========== Empty Test Cases =========== #
-    # empty known text + unknown text
-    
-    # known text + empty unknown text
-    
-    # empty known text + empty unknown text
-    
-    # empty known .pdf + unknown text
-    
-    # empty known .docx + unknown text
-    
-    # empty known .txt + unknown text
-    
-    # empty known text + empty known files + unknown text
-    
-    # known text + empty known files + unknown text
-    
-    # empty known text + known files + unknown text
-    
-    # known text + empty unknown .pdf
-    
-    # known text + empty unknown .docx
-    
-    # known text + empty unknown .txt
-    
-    # known text + unknown text + empty unknown file
-    
-    # ======================================== #
-    
-    # =========== Misc. Test Cases =========== #
-    # non-pdf-docx-txt file + unknown text
-    
-    # known text + non-pdf-docx-txt unknown file
-    
-    # known text + non-pdf-docx-txt file + known files + unknown text
-    
-    # known text + unknown text + non-pdf-docx-txt unknown file
-    
-    # unique ASCII known text + unknown text
-    
-    # known text + unique ASCII unknown text
-    
-    # unique ASCII known .pdf file + unknown text
-    
-    # unique ASCII known .docx file + unknown text
-    
-    # unique ASCII known .txt file + unknown text 
-    
-    # ======================================== #
-
 # create class for form data
 class FormData(object):
     def __init__(self, known_texts=[], unknown_text=None, known_files=[], unknown_file=None, expected_output=200):
@@ -93,7 +22,7 @@ class FlaskTestCase(unittest.TestCase):
         # unknown text only
         FormData(unknown_text='This is a test.', expected_output=400),
     ]
-    
+
     files_tests = [
         # known file + unknown file
         FormData(known_files=[open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')),
@@ -102,7 +31,7 @@ class FlaskTestCase(unittest.TestCase):
         # unknown file only
         FormData(unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb'), expected_output=400)
     ]
-    
+
     mix_tests = [
         # known text + known file + unknown file
         FormData(known_texts=['This is a test.'], known_files=[open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')),
@@ -119,16 +48,157 @@ class FlaskTestCase(unittest.TestCase):
         FormData(unknown_text='This is a test.', unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb'), expected_output=400),
         # .pdf + .docx + .txt + unknown pdf
         FormData(
-            known_files=[open(BASE_DIR+'/test_files/pdf_test01.txt', 'rb'),open(BASE_DIR+'/test_files/docx_test01.txt', 'rb'),open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
-            unknown_file=open(BASE_DIR+'/test_files/pdf_test02.txt', 'rb')
+            known_files=[open(BASE_DIR+'/test_files/pdf_test01.pdf', 'rb'),open(BASE_DIR+'/test_files/docx_test01.docx', 'rb'),open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_file=open(BASE_DIR+'/test_files/pdf_test02.pdf', 'rb')
         ),
         # .pdf + .docx + .txt + unknown docx
         FormData(
-            known_files=[open(BASE_DIR+'/test_files/pdf_test01.txt', 'rb'),open(BASE_DIR+'/test_files/docx_test01.txt', 'rb'),open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
-            unknown_file=open(BASE_DIR+'/test_files/docx_test02.txt', 'rb')
+            known_files=[open(BASE_DIR+'/test_files/pdf_test01.pdf', 'rb'),open(BASE_DIR+'/test_files/docx_test01.docx', 'rb'),open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_file=open(BASE_DIR+'/test_files/docx_test02.docx', 'rb')
         )
     ]
+
+    corrupt_tests = [
+        # corrupt pdf + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/pdf_test_CORRUPT.pdf', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # corrupt docx + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/docx_test_CORRUPT.docx', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # corrupt txt + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/txt_test_CORRUPT.txt', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # corrupt pdf + known files + known text + unknown text
+        FormData(
+            known_files=[open(BASE_DIR+'/test_files/pdf_test_CORRUPT.pdf', 'rb'), open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_file=open(BASE_DIR+'/test_files/pdf_test02.pdf', 'rb')
+        ),
+        # corrupt docx + known files + known text + unknown text
+        FormData(
+            known_files=[open(BASE_DIR+'/test_files/docx_test_CORRUPT.docx', 'rb'), open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_file=open(BASE_DIR+'/test_files/pdf_test02.pdf', 'rb')
+        ),
+        # corrupt txt + known files + known text + unknown text
+        FormData(
+            known_files=[open(BASE_DIR+'/test_files/txt_test_CORRUPT.txt', 'rb'), open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_file=open(BASE_DIR+'/test_files/pdf_test02.pdf', 'rb')
+        ),
+        # known text + corrupt unknown pdf
+        FormData(known_texts=['This is a test.'], unknown_file=open(BASE_DIR+'/test_files/pdf_test_CORRUPT.pdf', 'rb'), expected_output=401),
+        # known text + corrupt unknown docx
+        FormData(known_texts=['This is a test.'], unknown_file=open(BASE_DIR+'/test_files/docx_test_CORRUPT.docx', 'rb'), expected_output=401),
+        # known text + corrupt unknown txt
+        FormData(known_texts=['This is a test.'], unknown_file=open(BASE_DIR+'/test_files/txt_test_CORRUPT.txt', 'rb'), expected_output=401)
+    ]
     
+    empty_tests = [
+        # empty known text + unknown text
+        FormData(known_texts=[''], unknown_text='This is a test.', expected_output=400),
+        # known text + empty unknown text
+        FormData(known_texts=['This is a test.'], unknown_text='', expected_output=401),
+        # empty known text + empty unknown text
+        FormData(known_texts=[''], unknown_text='', expected_output=400),
+        # empty known .pdf + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/pdf_test_EMPTY.pdf', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # empty known .docx + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/docx_test_EMPTY.docx', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # empty known .txt + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/txt_test_EMPTY.txt', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # empty known text + empty known files + unknown text
+        FormData(
+            known_texts=[''],
+            known_files=[open(BASE_DIR+'/test_files/txt_test_EMPTY.txt', 'rb')], 
+            unknown_text='This is a test.',
+            expected_output=400
+        ),
+        # known text + empty known files + unknown text
+        FormData(
+            known_texts=['This is a test.'],
+            known_files=[open(BASE_DIR+'/test_files/txt_test_EMPTY.txt', 'rb')], 
+            unknown_text='This is a test.'
+        ),
+        # empty known text + known files + unknown text
+        FormData(
+            known_texts=[''],
+            known_files=[open(BASE_DIR+'/test_files/txt_test01.txt', 'rb')], 
+            unknown_text='This is a test.'
+        ),
+        # known text + empty unknown .pdf
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_file=open(BASE_DIR+'/test_files/pdf_test_EMPTY.pdf', 'rb'),
+            expected_output=401
+        ),
+        # known text + empty unknown .docx
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_file=open(BASE_DIR+'/test_files/docx_test_EMPTY.docx', 'rb'),
+            expected_output=401
+        ),
+        # known text + empty unknown .txt
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_file=open(BASE_DIR+'/test_files/txt_test_EMPTY.txt', 'rb'),
+            expected_output=401
+        ),
+        # known text + unknown text + empty unknown file
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_text='This is a test.',
+            unknown_file=open(BASE_DIR+'/test_files/txt_test_EMPTY.txt', 'rb'),
+        ),
+    ]
+
+    misc_tests = [
+        # non-pdf-docx-txt file + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/other_test.xml', 'rb')], unknown_text='This is a test.', expected_output=400),
+        # known text + non-pdf-docx-txt unknown file
+        FormData(known_texts=['This is a test.'], unknown_file=open(BASE_DIR+'/test_files/other_test.xml', 'rb'), expected_output=401),
+        # known text + non-pdf-docx-txt file + known files + unknown text
+        FormData(
+            known_texts=['This is a test.'],
+            known_files=[open(BASE_DIR+'/test_files/other_test.xml', 'rb')], 
+            unknown_text='This is a test.'
+        ),
+        # known text + unknown text + non-pdf-docx-txt unknown file
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_text='This is a test.',
+            unknown_file=open(BASE_DIR+'/test_files/other_test.xml', 'rb')
+        ),
+        # unique ASCII known text + unknown text
+        FormData(
+            known_texts=[
+                '''
+📉🤨🔫😊😃😁🙂🤩😘😙😣😌😠🫢🤡🐹🐼🐲🐭👩🏽‍🦳👳🏽‍♀️🧔🏽‍♀️🧔🏽👩🏿‍🏭👩🏿‍🔬👩🏿‍💻👩🏿‍💼👩🏿‍🔧🫸🏿🫱🏿‍🫲🏼🫱🏿‍🫲🏼
+(╬▔皿▔)╯[]~(￣▽￣)~*:P^o^^o^~_~~_~O.O¬_¬:-]T_T:S:-$:]*^____^*╰(*°▽°*)╯o(*^▽^*)┛(￣y▽￣)╭ Ohohoho.....○( ＾皿＾)っ Hehehe…(p≧w≦q)(o゜▽゜)o☆(｡･∀･)ﾉﾞ（づ￣3￣）づ╭❤️～（づ￣3￣）づ╭❤️～ヾ(^▽^*)))☆⌒(*＾-゜)v(｡･∀･)ﾉﾞo(*￣▽￣*)ブ(∪.∪ )...zzz\(@^0^@)/♪(´▽｀)（。＾▽＾）*★,°*:.☆(￣▽￣)/$:*.°★* 。ヽ(✿ﾟ▽ﾟ)ノ
+⨷Ⅲ°↑ø—℗¡⁈⁔⁐ª⏒⁒⏔֏₽﷼₤ǎáBÃçėGĜɣǐíÑŉŃņŊŋŌṆŀŒɷɶɸÕŐŘśŦʅßŝŢɾɻǜǘǛýʏŹʒʭŴʑʢ↔↓↨↪↯↠↡↟↮↲↬↸⇄⇥⇞⇔⇐⇉⇦⇧⇰⇷▨▦▧▪▮▯▬▤▣▦▥▢▸▶◀▰△◁▷◙▵◇◤◣◢◥◞◟◐◗◱◷◴◺◮◭◯◫◪■⁰⁷⁹⅛⅛⅞↉⅟∃∀ⅧⅶⅨⅥ∈∋⋿ⅳ∋∊∑∝∎∓∰∮∱≀≋≕≜≯≸≴≨≫⊆⊃≽⊁⊛⊙⊓⊐⊏⊕⊘⊢⊞⊥⊭⊬⊯⊬⊶⊱⊻⊾⋁⋛⋜⋥⋥⋢⋯⋰⋱⌗⏨⒎⒔⑨⑧⑤⋺⒐⑷⒀⒄⨀⨉⨐⨎⨂⨙⨟⨣⨔⨚⨭⨳⨱⨹⨶⨸⩑⩗⩄⩣⩝⩥⩫⩨⩷⪁⪈⪊⪋⪗⪛⪞⪜⪖⪪⫀⪫⪥⪼⫊⫏⫕⫤⫟⫦⫨⫲⫸⫻ηαγνχΩϜᾸΆᾋἊᾍᾆΈέΈἚἠήᾔἰᾚἵἿΌἲὸΫΎὁὡὕῥὬὣᾬᾤϴϸϏͽϛϓ
+🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧 🇦🇿 🇦🇺 🇦🇼 🇦🇴 🇦🇱 🇦🇲 🇦🇸 🇦🇹 🇦🇪 🇦🇬 🇦🇫 🇦🇮 🇦🇩 🇦🇷 🇧🇴 🇧🇷 🇧🇳 🇧🇲 🇧🇹 🇧🇸 🇧🇾 🇧🇿 🇧🇼 🇧🇪 🇧🇫 🇧🇬 🇧🇭 🇧🇮 🇧🇯 🇧🇦 🇧🇧 🇧🇩 🇨🇻 🇨🇼 🇨🇺 🇨🇿 🇨🇾 🇨🇲 🇨🇰 🇨🇱 🇨🇷 🇨🇴 🇨🇩 🇨🇦 🇨🇬 🇨🇫 🇨🇮 🇨🇭 🇩🇯 🇩🇲 🇩🇰 🇩🇴 🇩🇿 🇪🇹 🇪🇷 🇪🇬 🇪🇪 🇪🇨 🇫🇴 🇫🇮 🇫🇯 🇬🇹 🇬🇳 🇬🇲 🇬🇵 🇬🇷 🇬🇶 🇬🇺 🇬🇼 🇬🇾
+​​​​​​‍‍‌‌‌‎‎‎‎‏‏‏‏
+اﺍﺎʾبﺏﺐﺒﺑʾت	ﺕﺖﺘهﻩﻪ	ﻬﻫʾ
+龖釁𪚥爨 鬱饕餮𨽴 𤴒齉 龜纛鬻卖妻鬻女魑魅魍魎
+            '''
+            ],
+            unknown_text='This is a test.'
+        ),
+        # known text + unique ASCII unknown text
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_text='''
+📉🤨🔫😊😃😁🙂🤩😘😙😣😌😠🫢🤡🐹🐼🐲🐭👩🏽‍🦳👳🏽‍♀️🧔🏽‍♀️🧔🏽👩🏿‍🏭👩🏿‍🔬👩🏿‍💻👩🏿‍💼👩🏿‍🔧🫸🏿🫱🏿‍🫲🏼🫱🏿‍🫲🏼
+(╬▔皿▔)╯[]~(￣▽￣)~*:P^o^^o^~_~~_~O.O¬_¬:-]T_T:S:-$:]*^____^*╰(*°▽°*)╯o(*^▽^*)┛(￣y▽￣)╭ Ohohoho.....○( ＾皿＾)っ Hehehe…(p≧w≦q)(o゜▽゜)o☆(｡･∀･)ﾉﾞ（づ￣3￣）づ╭❤️～（づ￣3￣）づ╭❤️～ヾ(^▽^*)))☆⌒(*＾-゜)v(｡･∀･)ﾉﾞo(*￣▽￣*)ブ(∪.∪ )...zzz\(@^0^@)/♪(´▽｀)（。＾▽＾）*★,°*:.☆(￣▽￣)/$:*.°★* 。ヽ(✿ﾟ▽ﾟ)ノ
+⨷Ⅲ°↑ø—℗¡⁈⁔⁐ª⏒⁒⏔֏₽﷼₤ǎáBÃçėGĜɣǐíÑŉŃņŊŋŌṆŀŒɷɶɸÕŐŘśŦʅßŝŢɾɻǜǘǛýʏŹʒʭŴʑʢ↔↓↨↪↯↠↡↟↮↲↬↸⇄⇥⇞⇔⇐⇉⇦⇧⇰⇷▨▦▧▪▮▯▬▤▣▦▥▢▸▶◀▰△◁▷◙▵◇◤◣◢◥◞◟◐◗◱◷◴◺◮◭◯◫◪■⁰⁷⁹⅛⅛⅞↉⅟∃∀ⅧⅶⅨⅥ∈∋⋿ⅳ∋∊∑∝∎∓∰∮∱≀≋≕≜≯≸≴≨≫⊆⊃≽⊁⊛⊙⊓⊐⊏⊕⊘⊢⊞⊥⊭⊬⊯⊬⊶⊱⊻⊾⋁⋛⋜⋥⋥⋢⋯⋰⋱⌗⏨⒎⒔⑨⑧⑤⋺⒐⑷⒀⒄⨀⨉⨐⨎⨂⨙⨟⨣⨔⨚⨭⨳⨱⨹⨶⨸⩑⩗⩄⩣⩝⩥⩫⩨⩷⪁⪈⪊⪋⪗⪛⪞⪜⪖⪪⫀⪫⪥⪼⫊⫏⫕⫤⫟⫦⫨⫲⫸⫻ηαγνχΩϜᾸΆᾋἊᾍᾆΈέΈἚἠήᾔἰᾚἵἿΌἲὸΫΎὁὡὕῥὬὣᾬᾤϴϸϏͽϛϓ
+🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧 🇦🇿 🇦🇺 🇦🇼 🇦🇴 🇦🇱 🇦🇲 🇦🇸 🇦🇹 🇦🇪 🇦🇬 🇦🇫 🇦🇮 🇦🇩 🇦🇷 🇧🇴 🇧🇷 🇧🇳 🇧🇲 🇧🇹 🇧🇸 🇧🇾 🇧🇿 🇧🇼 🇧🇪 🇧🇫 🇧🇬 🇧🇭 🇧🇮 🇧🇯 🇧🇦 🇧🇧 🇧🇩 🇨🇻 🇨🇼 🇨🇺 🇨🇿 🇨🇾 🇨🇲 🇨🇰 🇨🇱 🇨🇷 🇨🇴 🇨🇩 🇨🇦 🇨🇬 🇨🇫 🇨🇮 🇨🇭 🇩🇯 🇩🇲 🇩🇰 🇩🇴 🇩🇿 🇪🇹 🇪🇷 🇪🇬 🇪🇪 🇪🇨 🇫🇴 🇫🇮 🇫🇯 🇬🇹 🇬🇳 🇬🇲 🇬🇵 🇬🇷 🇬🇶 🇬🇺 🇬🇼 🇬🇾
+​​​​​​‍‍‌‌‌‎‎‎‎‏‏‏‏
+اﺍﺎʾبﺏﺐﺒﺑʾت	ﺕﺖﺘهﻩﻪ	ﻬﻫʾ
+龖釁𪚥爨 鬱饕餮𨽴 𤴒齉 龜纛鬻卖妻鬻女魑魅魍魎
+            '''
+        ),
+        # unique ASCII known .pdf file + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/pdf_test_UNIQUE.pdf', 'rb')], unknown_text='This is a test.'),
+        # unique ASCII known .docx file + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/docx_test_UNIQUE.docx', 'rb')], unknown_text='This is a test.'),
+        # unique ASCII known .txt file + unknown text
+        FormData(known_files=[open(BASE_DIR+'/test_files/txt_test_UNIQUE.txt', 'rb')], unknown_text='This is a test.') 
+    ]
+
     def setUp(self):
         app.config['TESTING'] = True
         self.client = app.test_client()
@@ -148,7 +218,7 @@ class FlaskTestCase(unittest.TestCase):
             
             self.assertEqual(response.status_code, form_data.expected_output)
             self.assertEqual(response.content_type, 'application/json')
-            
+
     def test_files(self):
         for form_data in self.files_tests:
             data = {
@@ -164,9 +234,57 @@ class FlaskTestCase(unittest.TestCase):
             
             self.assertEqual(response.status_code, form_data.expected_output)
             self.assertEqual(response.content_type, 'application/json')
-            
+
     def test_mix(self):
         for form_data in self.mix_tests:
+            data = {
+                'known_texts': form_data.known_texts,
+                'known_files': form_data.known_files
+            }
+            if form_data.unknown_text:
+                data['unknown_text'] = form_data.unknown_text
+            if form_data.unknown_file:
+                data['unknown_file'] = form_data.unknown_file
+
+            response = self.client.post('/compare', data=data, content_type='multipart/form-data')
+            
+            self.assertEqual(response.status_code, form_data.expected_output)
+            self.assertEqual(response.content_type, 'application/json')
+
+    def test_corrupt(self):
+        for form_data in self.corrupt_tests:
+            data = {
+                'known_texts': form_data.known_texts,
+                'known_files': form_data.known_files
+            }
+            if form_data.unknown_text:
+                data['unknown_text'] = form_data.unknown_text
+            if form_data.unknown_file:
+                data['unknown_file'] = form_data.unknown_file
+
+            response = self.client.post('/compare', data=data, content_type='multipart/form-data')
+            
+            self.assertEqual(response.status_code, form_data.expected_output)
+            self.assertEqual(response.content_type, 'application/json')
+
+    def test_empty(self):
+        for form_data in self.empty_tests:
+            data = {
+                'known_texts': form_data.known_texts,
+                'known_files': form_data.known_files
+            }
+            if form_data.unknown_text:
+                data['unknown_text'] = form_data.unknown_text
+            if form_data.unknown_file:
+                data['unknown_file'] = form_data.unknown_file
+
+            response = self.client.post('/compare', data=data, content_type='multipart/form-data')
+            
+            self.assertEqual(response.status_code, form_data.expected_output)
+            self.assertEqual(response.content_type, 'application/json')
+
+    def test_misc(self):
+        for form_data in self.misc_tests:
             data = {
                 'known_texts': form_data.known_texts,
                 'known_files': form_data.known_files

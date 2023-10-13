@@ -29,8 +29,11 @@ def process_file(file):
         text = read_doc(file)
         return text
     elif file.filename.endswith(".txt"):
-        text = file.read().decode('UTF-8')
-        return text
+        try:
+            text = file.read().decode('UTF-8')
+            return text
+        except:
+            return None
     
     
 def proportion(a: float, b:float) -> float:
