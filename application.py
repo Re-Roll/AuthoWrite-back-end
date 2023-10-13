@@ -15,42 +15,42 @@ api = Api(app, doc='/docs')  # Setup API documentation
 # Create the API models
 compare_model = api.parser()
 compare_model.add_argument(
-    'known_texts', type=str, action='append', required=False, 
+    'known_texts', type=str, action='append', required=False,
     help='List of known texts to compare against')
 compare_model.add_argument(
-    'unknown_text', type=str, required=False, 
+    'unknown_text', type=str, required=False,
     help='Unknown text to compare against')
 compare_model.add_argument(
-    'known_files', type='file', action='append', required=False, 
+    'known_files', type='file', action='append', required=False,
     help='List of known files to compare against')
 compare_model.add_argument(
-    'unknown_file', type='file', required=False, 
+    'unknown_file', type='file', required=False,
     help='Unknown file to compare against')
 
 score_model = api.model('Score', {
     'w_sim': fields.List(fields.Float(
-        required=True, 
+        required=True,
         description='Word similarity between known and unknown texts')),
     'punct_p': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Proportion of punctuation used'),
     'avg_sent_l': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Average sentence length'),
     'rare_word_p': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Proportion of rare words used'),
     'long_word_p': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Proportion of long words used'),
     'ttr': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Proportion of unique words used compared to total words used'),
     'word_count': fields.List(
-        fields.Float(required=True), 
+        fields.Float(required=True),
         description='Total number of words used'),
     'score': fields.Integer(
-        required=True, 
+        required=True,
         description='Overall authorship score out of 100')
 })
 
@@ -71,7 +71,8 @@ class Compare(Resource):
         known_texts = request.form.getlist('known_texts')
         unknown_file = request.files.get('unknown_file')
         unknown_text = request.form.get('unknown_text')
-
+        print(known_files)
+        print(unknown_file)
         # Calculate the score
         score, response = compare_mix_texts(
             known_files, known_texts, unknown_file, unknown_text)
@@ -92,7 +93,6 @@ class Compare(Resource):
             abort(500, 'Error calculating score')
 
         return response, 200
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

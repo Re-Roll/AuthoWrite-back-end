@@ -10,7 +10,7 @@ def read_pdf(file):
         pdf_file = fitz.open(stream=file.read(), filetype="pdf")
         for page in pdf_file:
             text += page.get_text()
-    except RuntimeError:
+    except:
         return None
     return text
 
@@ -19,33 +19,33 @@ def read_doc(file):
     '''Extract text from .doc & .docx file'''
     try:
         text = docx2txt.process(file)
-    except zipfile.BadZipFile:
+    except:
         return None
     return text
 
 
 def process_file(file):
     '''Process files based on its type'''
+    text = None
     if file.filename.endswith(".pdf"):
         text = read_pdf(file)
-        return text
-    elif file.filename.endswith(".docx"):
+    if file.filename.endswith(".docx"):
         text = read_doc(file)
-        return text
-    elif file.filename.endswith(".txt"):
+    if file.filename.endswith(".txt"):
         try:
             text = file.read().decode('UTF-8')
-            return text
-        except UnicodeDecodeError:
+        except:
             return None
 
+    return text
 
-def proportion(a: float, b: float) -> float:
+
+def proportion(val1: float, val2: float) -> float:
     '''Calculate proportion of a to b'''
-    if b == 0:
+    if val2 == 0:
         return 0
-    else:
-        return min(a, b)/max(a, b)*100
+
+    return min(val1, val2)/max(val1, val2)*100
 
 
 def list_pct(lst: list[float]) -> float:
@@ -65,9 +65,9 @@ def simplify_response(response: dict) -> dict:
     punct = ['.', ';', ':', '!', '?', '-', '(', ')', '\"', '\'', '`', '/']
     punct_c1 = 0
     punct_c2 = 0
-    for p in punct:
-        punct_c1 += response[p][0]
-        punct_c2 += response[p][1]
+    for punc in punct:
+        punct_c1 += response[punc][0]
+        punct_c2 += response[punc][1]
     simplified_response['punct_p'] = [
         punct_c1*100, punct_c2*100, proportion(punct_c1, punct_c2)
     ]

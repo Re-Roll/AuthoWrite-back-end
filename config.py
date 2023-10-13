@@ -14,9 +14,3 @@ class DevConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'dev.db')
     DEBUG = True
     SQLALCHEMY_ECHO = True
-
-class ProdConfig(Config):
-    ''' Production configuration settings for the flask app '''
-
-class TestConfig(Config):
-    ''' Test configuration settings for the flask app '''
