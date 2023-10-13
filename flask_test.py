@@ -392,7 +392,10 @@ class FlaskTestCase(unittest.TestCase):
 
     def test_corrupt(self):
         '''Tests with corrupt files'''
+        i = 0
         for form_data in self.corrupt_tests:
+            print(i)
+            i += 1
             data = {
                 'known_texts': form_data.known_texts,
                 'known_files': form_data.known_files

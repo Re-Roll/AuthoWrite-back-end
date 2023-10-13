@@ -1,7 +1,7 @@
 ''' Functions for Document Processing and Response Simplification '''
+import zipfile
 import fitz
 import docx2txt
-
 
 def read_pdf(file):
     '''Extract text from .pdf file '''
@@ -19,7 +19,7 @@ def read_doc(file):
     '''Extract text from .doc & .docx file'''
     try:
         text = docx2txt.process(file)
-    except RuntimeError:
+    except zipfile.BadZipFile:
         return None
     return text
 
@@ -36,7 +36,7 @@ def process_file(file):
         try:
             text = file.read().decode('UTF-8')
             return text
-        except RuntimeError:
+        except UnicodeDecodeError:
             return None
 
 
