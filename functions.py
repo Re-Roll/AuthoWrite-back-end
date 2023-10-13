@@ -10,8 +10,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
 
-#nltk.download(["punkt", "stopwords","wordnet"])
-
 w2v_vector_size = 300
 
 def preprocess_text(text):
