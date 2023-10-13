@@ -4,6 +4,77 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
+# ========== Corrupt Test Cases ========== #
+    # corrupt pdf + unknown text
+    
+    # corrupt docx + unknown text
+    
+    # corrupt txt + unknown text
+    
+    # corrupt pdf + known files + known text + unknown text
+    
+    # corrupt docx + known files + known text + unknown text
+    
+    # corrupt txt + known files + known text + unknown text
+    
+    # known text + corrupt unknown pdf
+    
+    # known text + corrupt unknown docx
+    
+    # known text + corrupt unknown txt
+    
+    # ======================================== #
+    
+    # =========== Empty Test Cases =========== #
+    # empty known text + unknown text
+    
+    # known text + empty unknown text
+    
+    # empty known text + empty unknown text
+    
+    # empty known .pdf + unknown text
+    
+    # empty known .docx + unknown text
+    
+    # empty known .txt + unknown text
+    
+    # empty known text + empty known files + unknown text
+    
+    # known text + empty known files + unknown text
+    
+    # empty known text + known files + unknown text
+    
+    # known text + empty unknown .pdf
+    
+    # known text + empty unknown .docx
+    
+    # known text + empty unknown .txt
+    
+    # known text + unknown text + empty unknown file
+    
+    # ======================================== #
+    
+    # =========== Misc. Test Cases =========== #
+    # non-pdf-docx-txt file + unknown text
+    
+    # known text + non-pdf-docx-txt unknown file
+    
+    # known text + non-pdf-docx-txt file + known files + unknown text
+    
+    # known text + unknown text + non-pdf-docx-txt unknown file
+    
+    # unique ASCII known text + unknown text
+    
+    # known text + unique ASCII unknown text
+    
+    # unique ASCII known .pdf file + unknown text
+    
+    # unique ASCII known .docx file + unknown text
+    
+    # unique ASCII known .txt file + unknown text 
+    
+    # ======================================== #
+
 # create class for form data
 class FormData(object):
     def __init__(self, known_texts=[], unknown_text=None, known_files=[], unknown_file=None, expected_output=200):
