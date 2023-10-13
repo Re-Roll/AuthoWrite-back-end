@@ -19,7 +19,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pylint
-        python -c 'import nltk; nltk. download("punkt")'
+        python -c 'import nltk; nltk. download(["punkt", "stopwords","wordnet"])'
     - name: Run Tests
       run: |
         python -m unittest discover -p "*_test.py"
