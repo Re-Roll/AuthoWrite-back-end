@@ -1,5 +1,4 @@
 ''' Functions for Document Processing and Response Simplification '''
-import zipfile
 import fitz
 import docx2txt
 
