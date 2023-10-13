@@ -25,4 +25,5 @@ jobs:
         python -m unittest discover -p "*_test.py"
     - name: Analysing the code with pylint
       run: |
+        pylint -d R0903,W0702,R0913,R0903,R1732 $(git ls-files '*.py')
         pylint $(git ls-files '*.py')
