@@ -129,6 +129,8 @@ def analyze_words(text):
 def calculate_style_vector(text):
     """
     Calculate the style vector of the texts
+    Edited by Saaiq to output word count and 
+    fix dividing values that shouldn't be divided
     """
     punctuation_vec = count_punctuations(
         text)     # Punctuations stylistic features
