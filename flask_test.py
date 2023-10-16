@@ -24,6 +24,18 @@ class FormData:
         self.unknown_file = unknown_file
         self.expected_output = expected_output
 
+    def create_data(self) -> dict:
+        '''create data to send to API using form data'''
+        data = {
+                'known_texts': self.known_texts,
+                'known_files': self.known_files
+        }
+        if self.unknown_text:
+            data['unknown_text'] = self.unknown_text
+        if self.unknown_file:
+            data['unknown_file'] = self.unknown_file
+
+        return data
 
 class FlaskTestCase(unittest.TestCase):
     '''Class to run test cases for flask app'''
@@ -70,7 +82,6 @@ class FlaskTestCase(unittest.TestCase):
             unknown_text='This is a test.'
         ),
         # known text + unknown file
-        # CHECK it's the same as test case below (test unknown file priority)
         FormData(
             known_texts=['This is a test.'],
             unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')
@@ -333,6 +344,19 @@ class FlaskTestCase(unittest.TestCase):
         )
     ]
 
+    sim_test = (
+        # making sure unknown file takes priority over unknown text
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')
+        ),
+        FormData(
+            known_texts=['This is a test.'],
+            unknown_text='This is a test.',
+            unknown_file=open(BASE_DIR+'/test_files/txt_test02.txt', 'rb')
+        )
+    )
+
     def setUp(self):
         '''Sets up the flask app for testing'''
         app.config['TESTING'] = True
@@ -341,14 +365,7 @@ class FlaskTestCase(unittest.TestCase):
     def test_texts(self):
         '''Tests with text only'''
         for form_data in self.text_tests:
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
@@ -359,14 +376,7 @@ class FlaskTestCase(unittest.TestCase):
     def test_files(self):
         '''Tests with files only'''
         for form_data in self.files_tests:
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
@@ -377,14 +387,7 @@ class FlaskTestCase(unittest.TestCase):
     def test_mix(self):
         '''Tests with a mix of text and files'''
         for form_data in self.mix_tests:
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
@@ -394,18 +397,8 @@ class FlaskTestCase(unittest.TestCase):
 
     def test_corrupt(self):
         '''Tests with corrupt files'''
-        i = 0
         for form_data in self.corrupt_tests:
-            print(i)
-            i += 1
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
@@ -416,14 +409,7 @@ class FlaskTestCase(unittest.TestCase):
     def test_empty(self):
         '''Tests with files that have no content'''
         for form_data in self.empty_tests:
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
@@ -434,17 +420,28 @@ class FlaskTestCase(unittest.TestCase):
     def test_misc(self):
         '''Miscelanious tests'''
         for form_data in self.misc_tests:
-            data = {
-                'known_texts': form_data.known_texts,
-                'known_files': form_data.known_files
-            }
-            if form_data.unknown_text:
-                data['unknown_text'] = form_data.unknown_text
-            if form_data.unknown_file:
-                data['unknown_file'] = form_data.unknown_file
+            data = form_data.create_data()
 
             response = self.client.post(
                 '/compare', data=data, content_type='multipart/form-data')
 
             self.assertEqual(response.status_code, form_data.expected_output)
             self.assertEqual(response.content_type, 'application/json')
+
+    def test_sim(self):
+        '''Test to makesure responses are the same'''
+        form_data1, form_data2 = self.sim_test
+        # create data
+        data1 = form_data1.create_data()
+        data2 = form_data2.create_data()
+
+        # create responses
+        response1 = self.client.post(
+            '/compare', data=data1, content_type='multipart/form-data')
+        response2 = self.client.post(
+            '/compare', data=data2, content_type='multipart/form-data')
+
+        # make sure responses are the same
+        self.assertEqual(response1.status_code, response2.status_code)
+        self.assertEqual(response1.content_type, response2.content_type)
+        self.assertEqual(response1.data, response2.data)
