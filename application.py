@@ -79,9 +79,9 @@ class Compare(Resource):
 
         # Check for errors
         if score == 2:
-            abort(400, 'No known texts provided')
+            abort(400, 'No known texts provided or known files couldnt be read')
         elif score == 3:
-            abort(401, 'No unknown text provided')
+            abort(401, 'No unknown text provided or unknown file couldnt be read')
 
         print(score)
 
