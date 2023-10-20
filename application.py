@@ -71,8 +71,7 @@ class Compare(Resource):
         known_texts = request.form.getlist('known_texts')
         unknown_file = request.files.get('unknown_file')
         unknown_text = request.form.get('unknown_text')
-        print(known_files)
-        print(unknown_file)
+
         # Calculate the score
         score, response = compare_mix_texts(
             known_files, known_texts, unknown_file, unknown_text)
@@ -82,8 +81,6 @@ class Compare(Resource):
             abort(400, 'No known texts provided or known files couldnt be read')
         elif score == 3:
             abort(401, 'No unknown text provided or unknown file couldnt be read')
-
-        print(score)
 
         # finalise response
         response = simplify_response(response)
